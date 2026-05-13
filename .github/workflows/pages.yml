@@ -27,8 +27,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Configure Pages
+      - name: Setup Pages
         uses: actions/configure-pages@v5
+      - name: Configure Pages
+        run: echo "Publishing static site from docs/"
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
