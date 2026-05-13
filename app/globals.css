@@ -329,6 +329,31 @@ textarea {
   border-top: 1px solid var(--line);
 }
 
+.sectionHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.sectionHeader h2,
+.sectionHeader p {
+  margin: 0;
+}
+
+.inlineUpload {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.inlineUpload input {
+  max-width: 260px;
+}
+
 .bar {
   height: 10px;
   border-radius: 999px;
@@ -378,6 +403,15 @@ textarea {
   .pageHeader {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .sectionHeader {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .inlineUpload {
+    justify-content: flex-start;
   }
 
   .span4,

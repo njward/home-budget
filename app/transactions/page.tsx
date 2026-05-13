@@ -1,6 +1,6 @@
 import { AppNav } from "@/components/nav";
 import { PlaidConnect } from "@/components/plaid-connect";
-import { updateTransaction } from "@/app/actions/budget-actions";
+import { importSimplifiTransactions, updateTransaction } from "@/app/actions/budget-actions";
 import { requireHousehold } from "@/lib/household";
 import { dollars } from "@/lib/money";
 import { prisma } from "@/lib/prisma";
@@ -33,6 +33,17 @@ export default async function TransactionsPage() {
         </div>
 
         <section className="panel">
+          <div className="sectionHeader">
+            <div>
+              <h2>Import CSV</h2>
+              <p className="muted">Upload a Quicken Simplifi transactions export. Excluded rows are skipped.</p>
+            </div>
+            <form action={importSimplifiTransactions} className="inlineUpload">
+              <input aria-label="Simplifi CSV file" name="file" required type="file" accept=".csv,text/csv" />
+              <button className="button" type="submit">Import Simplifi CSV</button>
+            </form>
+          </div>
+
           <table className="table">
             <thead>
               <tr>

@@ -22,6 +22,7 @@ Implemented so far:
 - Basic README and `.env.example` for local and VM setup.
 - Local Docker Compose setup for Postgres.
 - Idempotent local seed data for dashboard and planning screens while real Plaid institution access is pending.
+- Quicken Simplifi CSV import from the Transactions page, with deterministic import IDs to avoid double-counting.
 
 ## Key Files
 
@@ -29,6 +30,7 @@ Implemented so far:
 - `.env.example` - required environment variables.
 - `docker-compose.yml` - local Postgres service matching the default `DATABASE_URL`.
 - `prisma/seed.sql` - realistic local demo data; run with `node --run db:seed`.
+- `lib/csv.ts` - small CSV parser used by the Simplifi importer.
 - `prisma/schema.prisma` - database schema and domain model.
 - `lib/auth.ts` - NextAuth Google configuration.
 - `lib/household.ts` - authenticated household bootstrap and starter data.
@@ -53,8 +55,9 @@ Implemented so far:
 - Household invite flow exists for Google account emails. Pending invites are accepted automatically the first time that email signs in.
 - Invited users cannot be removed from households yet, and there is no email delivery for invites.
 - Transactions can be categorized and marked as burst spending, but there is no rule engine for automatic categorization.
+- Simplifi CSV import currently supports the standard `Date,Account,Payee,Category,Exclusion,Amount` export shape.
 - Budgeting is category-level only; monthly budget editing is not fully built out.
-- No CSV import/export yet.
+- Generic bank CSV import/export is not built yet; only Simplifi transaction CSV import exists.
 - No tests yet.
 - `npm install` reported 5 audit findings: 2 low and 3 moderate. `npm audit fix --force` was not run because it may introduce breaking changes.
 

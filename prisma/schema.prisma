@@ -165,6 +165,7 @@ model Transaction {
   accountId          String?
   categoryId         String?
   plaidTransactionId String?           @unique
+  importId           String?           @unique
   date               DateTime
   name               String
   merchantName       String?
