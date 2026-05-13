@@ -7,6 +7,72 @@ import { prisma } from "@/lib/prisma";
 
 const money = z.coerce.number().finite().nonnegative();
 
+function requireOwner(role: string) {
+  if (role !== "OWNER") {
+    throw new Error("Only household owners can manage invitations.");
+  }
+}
+
+export async function createHouseholdInvite(formData: FormData) {
+  const { household, membership, user } = await requireHousehold();
+  requireOwner(membership.role);
+
+  const payload = z
+    .object({
+      email: z.string().email().transform((email) => email.toLowerCase()),
+      role: z.enum(["OWNER", "MEMBER"]).default("MEMBER")
+    })
+    .parse({
+      email: formData.get("email"),
+      role: formData.get("role") || "MEMBER"
+    });
+
+  await prisma.householdInvite.upsert({
+    where: {
+      householdId_email: {
+        householdId: household.id,
+        email: payload.email
+      }
+    },
+    update: {
+      role: payload.role,
+      acceptedAt: null,
+      createdByUserId: user.id
+    },
+    create: {
+      householdId: household.id,
+      email: payload.email,
+      role: payload.role,
+      createdByUserId: user.id
+    }
+  });
+
+  revalidatePath("/household");
+}
+
+export async function removeHouseholdInvite(formData: FormData) {
+  const { household, membership } = await requireHousehold();
+  requireOwner(membership.role);
+
+  const payload = z
+    .object({
+      inviteId: z.string()
+    })
+    .parse({
+      inviteId: formData.get("inviteId")
+    });
+
+  await prisma.householdInvite.deleteMany({
+    where: {
+      id: payload.inviteId,
+      householdId: household.id,
+      acceptedAt: null
+    }
+  });
+
+  revalidatePath("/household");
+}
+
 export async function createCategory(formData: FormData) {
   const { household } = await requireHousehold();
   const payload = z

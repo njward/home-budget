@@ -203,6 +203,18 @@ textarea {
   gap: 10px;
 }
 
+.stack {
+  display: grid;
+  gap: 8px;
+}
+
+.inlineError {
+  margin: 0;
+  color: var(--bad);
+  font-size: 13px;
+  font-weight: 700;
+}
+
 .button {
   display: inline-flex;
   align-items: center;
@@ -226,6 +238,12 @@ textarea {
 .button:disabled {
   cursor: wait;
   opacity: 0.55;
+}
+
+.iconOnly {
+  width: 38px;
+  min-height: 38px;
+  padding: 0;
 }
 
 .table {
@@ -295,6 +313,20 @@ textarea {
 
 .field.full {
   grid-column: 1 / -1;
+}
+
+.formAction {
+  align-self: end;
+}
+
+.compactForm {
+  margin-bottom: 22px;
+}
+
+.sectionBreak {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
 }
 
 .bar {

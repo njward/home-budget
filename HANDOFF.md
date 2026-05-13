@@ -18,12 +18,15 @@ Implemented so far:
   - Budget categories
   - Goals
   - Burst spending and long-term planning
+  - Household member and invite management
 - Basic README and `.env.example` for local and VM setup.
+- Local Docker Compose setup for Postgres.
 
 ## Key Files
 
 - `README.md` - setup, OAuth, Plaid, and deployment notes.
 - `.env.example` - required environment variables.
+- `docker-compose.yml` - local Postgres service matching the default `DATABASE_URL`.
 - `prisma/schema.prisma` - database schema and domain model.
 - `lib/auth.ts` - NextAuth Google configuration.
 - `lib/household.ts` - authenticated household bootstrap and starter data.
@@ -36,14 +39,16 @@ Implemented so far:
 - `app/budgets/page.tsx` - category management.
 - `app/goals/page.tsx` - savings goal tracking.
 - `app/planning/page.tsx` - burst spending and wealth scenario planning.
+- `app/household/page.tsx` - household member list and owner-managed Google email invites.
 - `components/plaid-connect.tsx` - Plaid Link browser component.
 
 ## Known Issues / Gaps
 
 - No real `.env` is committed. Google OAuth, Plaid credentials, `NEXTAUTH_SECRET`, and `DATABASE_URL` must be configured locally or on the VM.
-- No Prisma migration files exist yet. Run `npx prisma migrate dev` after setting `DATABASE_URL`.
+- Initial Prisma migration exists and has been applied locally to Docker Postgres.
 - Plaid sync currently requires an authenticated web session. A VM cron job needs either a dedicated server-side job path or a protected internal sync command.
-- Household sharing/invite flow is not implemented yet. The first signed-in user auto-creates a household.
+- Household invite flow exists for Google account emails. Pending invites are accepted automatically the first time that email signs in.
+- Invited users cannot be removed from households yet, and there is no email delivery for invites.
 - Transactions can be categorized and marked as burst spending, but there is no rule engine for automatic categorization.
 - Budgeting is category-level only; monthly budget editing is not fully built out.
 - No CSV import/export yet.
@@ -52,9 +57,9 @@ Implemented so far:
 
 ## Next Steps
 
-1. Create `.env` from `.env.example` and configure Postgres, Google OAuth, NextAuth, and Plaid sandbox credentials.
-2. Run `npx prisma migrate dev` to create the first migration and local database tables.
-3. Add a proper household invite/allowlist flow for both spouses.
+1. Fill in Google OAuth and Plaid sandbox credentials in `.env`.
+2. Sign in locally and verify first household creation against Docker Postgres.
+3. Add household member removal and optional email delivery for invitations.
 4. Extract Plaid sync logic into a reusable service and add a cron-safe import job for the home VM.
 5. Add transaction categorization rules based on merchant/name patterns.
 6. Build monthly budget editing and variance reporting.

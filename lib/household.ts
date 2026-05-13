@@ -27,8 +27,43 @@ export async function requireHousehold() {
   if (existing) {
     return {
       user: session.user,
-      household: existing.household
+      household: existing.household,
+      membership: existing
     };
+  }
+
+  const invitedEmail = session.user.email?.toLowerCase();
+
+  if (invitedEmail) {
+    const invite = await prisma.householdInvite.findFirst({
+      where: {
+        email: invitedEmail,
+        acceptedAt: null
+      },
+      include: { household: true },
+      orderBy: { createdAt: "asc" }
+    });
+
+    if (invite) {
+      const membership = await prisma.householdMember.create({
+        data: {
+          householdId: invite.householdId,
+          userId: session.user.id,
+          role: invite.role
+        }
+      });
+
+      await prisma.householdInvite.update({
+        where: { id: invite.id },
+        data: { acceptedAt: new Date() }
+      });
+
+      return {
+        user: session.user,
+        household: invite.household,
+        membership
+      };
+    }
   }
 
   const household = await prisma.household.create({
@@ -76,6 +111,11 @@ export async function requireHousehold() {
 
   return {
     user: session.user,
-    household
+    household,
+    membership: {
+      householdId: household.id,
+      userId: session.user.id,
+      role: "OWNER" as const
+    }
   };
 }

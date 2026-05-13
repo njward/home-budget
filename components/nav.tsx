@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Banknote, ChartNoAxesCombined, Gauge, PiggyBank, ReceiptText } from "lucide-react";
+import { Banknote, ChartNoAxesCombined, Gauge, PiggyBank, ReceiptText, Users } from "lucide-react";
 import { SignOutButton } from "@/components/auth-buttons";
 
 const links = [
@@ -7,7 +7,8 @@ const links = [
   { href: "/transactions", label: "Transactions", icon: ReceiptText },
   { href: "/budgets", label: "Budgets", icon: Banknote },
   { href: "/goals", label: "Goals", icon: PiggyBank },
-  { href: "/planning", label: "Planning", icon: ChartNoAxesCombined }
+  { href: "/planning", label: "Planning", icon: ChartNoAxesCombined },
+  { href: "/household", label: "Household", icon: Users }
 ];
 
 export function AppNav({ userName }: { userName?: string | null }) {
