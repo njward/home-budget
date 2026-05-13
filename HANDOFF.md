@@ -21,12 +21,14 @@ Implemented so far:
   - Household member and invite management
 - Basic README and `.env.example` for local and VM setup.
 - Local Docker Compose setup for Postgres.
+- Idempotent local seed data for dashboard and planning screens while real Plaid institution access is pending.
 
 ## Key Files
 
 - `README.md` - setup, OAuth, Plaid, and deployment notes.
 - `.env.example` - required environment variables.
 - `docker-compose.yml` - local Postgres service matching the default `DATABASE_URL`.
+- `prisma/seed.sql` - realistic local demo data; run with `node --run db:seed`.
 - `prisma/schema.prisma` - database schema and domain model.
 - `lib/auth.ts` - NextAuth Google configuration.
 - `lib/household.ts` - authenticated household bootstrap and starter data.
@@ -46,6 +48,7 @@ Implemented so far:
 
 - No real `.env` is committed. Google OAuth, Plaid credentials, `NEXTAUTH_SECRET`, and `DATABASE_URL` must be configured locally or on the VM.
 - Initial Prisma migration exists and has been applied locally to Docker Postgres.
+- Local seed data can coexist with Plaid data because seed transactions use deterministic `seed-*` IDs.
 - Plaid sync currently requires an authenticated web session. A VM cron job needs either a dedicated server-side job path or a protected internal sync command.
 - Household invite flow exists for Google account emails. Pending invites are accepted automatically the first time that email signs in.
 - Invited users cannot be removed from households yet, and there is no email delivery for invites.
